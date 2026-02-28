@@ -13,6 +13,8 @@
 #include <set>
 #include <queue>
 #include <sstream>
+#include <unordered_map>
+#include <string>
 using namespace std;
 
 #include "utilities.h"
@@ -33,27 +35,53 @@ int main(int argc, char** argv){
         cerr << "Could not open file " << argv[1];
         exit(1);
     }
-  
-    // Create an object of a STL data-structure to store all the movies
 
+    struct compare_movie_alphabet_order {
+        string alpahbet = "abcdefghijklmnopqrstuvwxyz";
+        bool operator()(movies& movie1, movies& movie2){
+            string title_of_movie1 = movie1.get_movie_name();
+            string title_of_movie2 = movie2.get_movie_name();
+            auto index_preifx_of_movie1 = alpahbet.find(title_of_movie1[0]);
+            auto index_preifx_of_movie2 = alpahbet.find(title_of_movie2[0]);
+            return index_preifx_of_movie1 > index_preifx_of_movie2;
+        }
+    };
+    // Create an object of a STL data-structure to store all the movies
+    priority_queue<movies, vector<movies>, compare_movie_alphabet_order> alphabetical_movie_list;
+    unordered_map<string, vector<movies>> prefix_based_list;
     string line, movieName;
     double movieRating;
     // Read each file and store the name and rating
     while (getline (movieFile, line) && parseLine(line, movieName, movieRating)){
             // Use std::string movieName and double movieRating
             // to construct your Movie objects
-            // cout << movieName << " has rating " << movieRating << endl;
-            // insert elements into your data structure
+            movies current_movie_in_line(movieName, movieRating);
+            if(argc == 2){
+                alphabetical_movie_list.push(current_movie_in_line);
+            }
+            if(argc == 3){
+                string first_prefix = current_movie_in_line.get_movie_name().substr(0,1);
+                prefix_based_list[first_prefix].push_back(current_movie_in_line);
+            }
+            
     }
 
     movieFile.close();
 
     if (argc == 2){
-            //print all the movies in ascending alphabetical order of movie names
+            while(!(alphabetical_movie_list.empty())){
+                movies top = alphabetical_movie_list.top();
+                string top_movie_name = top.get_movie_name();
+                double top_movie_score = top.get_movie_rating();
+                cout << top_movie_name << ", " << top_movie_score << endl;
+                alphabetical_movie_list.pop();
+            }
             return 0;
     }
 
     ifstream prefixFile (argv[2]);
+
+
 
     if (prefixFile.fail()) {
         cerr << "Could not open file " << argv[2];
@@ -67,14 +95,43 @@ int main(int argc, char** argv){
         }
     }
 
+    vector<pair<movies, string>> highest;
+    for(int i = 0; i < prefixes.size(); i ++){
+        string first_letter_of_prefix = prefixes[i].substr(0,1);
+        int number_of_movies_with_prefix = 0;
+        bool found_movie = false;
+        movies current_highest("", -1.0); 
+        for(int j = 0; j < prefix_based_list[first_letter_of_prefix].size(); j ++){
+            movies& current_movie = prefix_based_list[first_letter_of_prefix][j];
+            string name_of_current_movie = current_movie.get_movie_name();
+            if(prefixes[i] == name_of_current_movie.substr(0,prefixes[i].size())){
+                if(!found_movie || current_movie.get_movie_rating() > current_highest.get_movie_rating() || (current_movie.get_movie_rating() == current_highest.get_movie_rating() && current_movie.get_movie_name() > current_highest.get_movie_name())){
+                    current_highest = current_movie;  
+                    found_movie = true;
+                }
+                number_of_movies_with_prefix += 1;
+                double movie_score = prefix_based_list[first_letter_of_prefix][j].get_movie_rating();
+                cout << name_of_current_movie << ", " << movie_score << endl;
+            }
+        }
+            cout << "\n";
+
+            if(number_of_movies_with_prefix == 0){
+                cout << "No movies found with prefix "<< prefixes[i] << endl;
+            }
+            
+            if(found_movie) {
+                highest.push_back(make_pair(current_highest, prefixes[i]));
+            }
+        }
+    
     //  For each prefix,
     //  Find all movies that have that prefix and store them in an appropriate data structure
-    //  If no movie with that prefix exists print the following message
-    cout << "No movies found with prefix "<<"<replace with prefix>" << endl;
-
+    for(int i = 0; i < highest.size(); i ++){
+        cout << "Best movie with prefix " << highest[i].second << " is: " << highest[i].first.get_movie_name() << " with rating " << std::fixed << std::setprecision(1) << highest[i].first.get_movie_rating()<< endl;
+    }
     //  For each prefix,
     //  Print the highest rated movie with that prefix if it exists.
-    cout << "Best movie with prefix " << "<replace with prefix>" << " is: " << "replace with movie name" << " with rating " << std::fixed << std::setprecision(1) << "replace with movie rating" << endl;
 
     return 0;
 }
