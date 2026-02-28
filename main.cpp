@@ -211,14 +211,20 @@ int main(int argc, char** argv){
  *
  *
  *
- *   Honestly, I mainly designed it for low time complexity because I don't understand space complexity well enough to think about it as much as I can think about time complexity.
- *   My goal was to make the prefix search just work by grouping movies by their
+ *   Honestly, I mainly designed it for low time complexity because I don't understand space complexity well 
+ *   enough to think about it as much as I can think about time complexity.
+ *   I didn't really have a target complexity going in because there was so many variables but I was ainming 
+ *   initally around O(logn) time, turns out there was a lot more quirks during implmentation that slowed it down.
+ *   My goal was to make the prefix search just by grouping movies by their
  *   first letter so I don't have to scan every single movie for every prefix.
- *    My space complexity is O(n) because I store all n movies
+ *   Space complexity isn't terrible but not great...
+ *   My space complexity is O(n) because I store all n movies
  *   inside the unordered_map (in the vectors inside the buckets). On top
  *   of that, for each prefix query I also create a temporary vector to hold
  *   the matching movies before sorting them, which in the worst case adds
- *   another O(k) space. Space complexity was never something I had in mind, maybe ill work on this next time.
+ *   another O(k) space. Frankly Space complexity was never something I had in mind since I was so focused on time
+ *   and its just less of an well trodden out concept for me as the general culture of CS is more focused on time complexity.
+ *   maybe ill work on space complexity more next time.
  *   The hardest part was honestly getting used with unordered_map.
  *   I hadn't really used it before outside of seeing it on lecture slides, so figuring
  *   out how to insert into it, access a bucket by key, and iterate over
