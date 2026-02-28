@@ -26,7 +26,7 @@ bool compare_movie_ratings_then_alphabet(movies& movie1, movies& movie2){
     if(movie1.get_movie_rating() != movie2.get_movie_rating()){
         return movie1.get_movie_rating() > movie2.get_movie_rating();
     }
-    movie1.get_movie_name() < movie2.get_movie_name();
+    return movie1.get_movie_name() < movie2.get_movie_name();
 }
 
 int main(int argc, char** argv){
