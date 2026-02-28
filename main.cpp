@@ -115,7 +115,7 @@ int main(int argc, char** argv){
             string name_of_current_movie = current_movie.get_movie_name();
             if(prefixes[i] == name_of_current_movie.substr(0,prefixes[i].size())){
                 matching_movies_for_prefix.push_back(current_movie);
-                if(!found_movie || current_movie.get_movie_rating() > current_highest.get_movie_rating() || (current_movie.get_movie_rating() == current_highest.get_movie_rating() && current_movie.get_movie_name() > current_highest.get_movie_name())){
+                if(!found_movie || current_movie.get_movie_rating() > current_highest.get_movie_rating() || (current_movie.get_movie_rating() == current_highest.get_movie_rating() && current_movie.get_movie_name() < current_highest.get_movie_name())){
                     current_highest = current_movie;  
                     found_movie = true;
                 }
