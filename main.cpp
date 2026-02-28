@@ -137,7 +137,6 @@ int main(int argc, char** argv){
     
 
     
-    cout << "\n";
     //  For each prefix,
     //  Find all movies that have that prefix and store them in an appropriate data structure
     for(int i = 0; i < highest.size(); i ++){
