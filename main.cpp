@@ -95,6 +95,9 @@ int main(int argc, char** argv){
 
     vector<string> prefixes;
     while (getline (prefixFile, line)) {
+        if (!line.empty() && line.back() == '\r') {
+            line.pop_back(); // strip Windows-style \r from CRLF line endings
+        }
         if (!line.empty()) {
             prefixes.push_back(line);
         }
