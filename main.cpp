@@ -41,9 +41,7 @@ int main(int argc, char** argv){
         bool operator()(movies& movie1, movies& movie2){
             string title_of_movie1 = movie1.get_movie_name();
             string title_of_movie2 = movie2.get_movie_name();
-            auto index_preifx_of_movie1 = alpahbet.find(title_of_movie1[0]);
-            auto index_preifx_of_movie2 = alpahbet.find(title_of_movie2[0]);
-            return index_preifx_of_movie1 > index_preifx_of_movie2;
+            return title_of_movie1 > title_of_movie2;
         }
     };
     // Create an object of a STL data-structure to store all the movies
@@ -119,7 +117,7 @@ int main(int argc, char** argv){
             if(number_of_movies_with_prefix == 0){
                 cout << "No movies found with prefix "<< prefixes[i] << endl;
             }
-            
+
             if(found_movie) {
                 highest.push_back(make_pair(current_highest, prefixes[i]));
             }
