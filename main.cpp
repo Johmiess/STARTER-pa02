@@ -154,7 +154,61 @@ int main(int argc, char** argv){
     return 0;
 }
 
-/* Add your run time analysis for part 3 of the assignment here as commented block*/
+/*
+ * Part 3: Time Complexity Analysis
+ *
+ * The parameters that affect how long my algorithm takes to run are:
+ *   n = total number of movies
+ *   m = total number of prefixes we're searching for
+ *   k = how many movies actually match a given prefix (at most n)
+ *   l = the length of the prefix
+ * Data structure I used:
+ *   I used an unordered_map where the key is the first letter of a movie's
+ *   title, and the value is a vector of all movies starting with
+ *   that letter. So I split all the movies into 26 buckets,
+ *   one for each letter of the alphabet.
+ *
+ * Loading the movies :
+ *   For each of the n movies, I just grab the first letter and throw
+ *   the movie into the right bucket. Each of those steps is O(1). Thus,
+ *   so loading all n movies is  O(n) .
+ *
+ *   For each prefix, the m parameter I do two things:
+ *
+ *   1. Scan the right bucket:I look at the first letter of the prefix, grab that bucket,
+ *      and go through every movie in it one by one to check if the
+ *      movie's name starts with the prefix. In the worst case, all
+ *      n movies are in one bucket, so this scan is O(n * l) per prefix
+ *      L is because checking if a string starts with the prefix
+ *      takes time proportional to the length of the prefix.
+ *   2. Sort the matching movies: 
+ *      Once I have all the movies that match, I sort them by rating
+ *      and alphabetically for ties. If k movies matched, sorting
+ *      takes O(k * log(k) * l). In the worst case k = n, so this
+ *      is O(n * log(n) * l).
+ *
+ *   The sort step is slower than the scan step, so the total cost
+ *   per prefix is O(n * log(n) * l).
+ *
+ *   Since I do this for all m prefixes, the total running time is:
+ *   O(m * n * log(n) * l)
+ *   since l is a constant: O(m * n * log n)
+ *
+ * Measured runtimes using prefix_large.txt:
+ *
+ *   input_20_random.csv    (n =     20) -->   ~12 ms
+ *   input_100_random.csv   (n =    100) -->   ~17 ms
+ *   input_1000_random.csv  (n =  1,000) -->   ~59 ms
+ *   input_76920_random.csv (n = 76,920) --> ~3,958 ms
+ *
+ * 
+ *   Looking at the jump from n=1,000 to n=76,920, the runtime went
+ *   from ~59 ms to ~3,958 ms, which is about 67x slower(haha). The n*log(n)
+ *   factor predicts roughly a 265x increase, so the measured growth is
+ *   in the right ballpark . The runtimes
+ *   do clearly grow faster than linearly as n increases, which matches
+ *   the O(m * n * log n) prediction.
+ */
 
 bool parseLine(string &line, string &movieName, double &movieRating) {
     int commaIndex = line.find_last_of(",");
