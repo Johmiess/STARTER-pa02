@@ -208,39 +208,21 @@ int main(int argc, char** argv){
  *   in the right ballpark . The runtimes
  *   do clearly grow faster than linearly as n increases, which matches
  *   the O(m * n * log n) prediction.
- */
-
-/*
- * Part 3: Algorithm Design and Space Complexity Analysis
  *
- * Did I design my algorithm for low time complexity, low space complexity, or both?
- *   Honestly, I mainly designed it for low time complexity. My goal was to
- *   make the prefix search as fast as possible by grouping movies by their
+ *
+ *
+ *   Honestly, I mainly designed it for low time complexity because I don't understand space complexity well enough to think about it as much as I can think about time complexity.
+ *   My goal was to make the prefix search just work by grouping movies by their
  *   first letter so I don't have to scan every single movie for every prefix.
- *   My target time complexity was O(m * n * log n).
- *
- * Was I able to achieve a low space complexity as well?
- *   Not really. My space complexity is O(n) because I store all n movies
+ *    My space complexity is O(n) because I store all n movies
  *   inside the unordered_map (in the vectors inside the buckets). On top
  *   of that, for each prefix query I also create a temporary vector to hold
  *   the matching movies before sorting them, which in the worst case adds
- *   another O(k) space (where k is the number of matches). So overall
- *   space is O(n), which isn't bad, but I didn't really try to optimize it.
- *   I just stored whatever I needed to make the time complexity work.
- *
- * Which was harder to achieve?
- *   Time complexity was harder to think about. Space was kind of automatic --
- *   I just needed to store the movies somewhere, and a vector inside a map
- *   felt natural. But figuring out how to structure the data so that prefix
- *   lookups were fast took more thought. I had to decide what to use as the
- *   map key (I went with first letter), and that decision directly affected
- *   how much scanning I had to do per query.
- *
- * Biggest challenge:
- *   The hardest part was honestly getting comfortable with unordered_map.
- *   I hadn't really used it before outside of lecture slides, so figuring
+ *   another O(k) space. Space complexity was never something I had in mind, maybe ill work on this next time.
+ *   The hardest part was honestly getting used with unordered_map.
+ *   I hadn't really used it before outside of seeing it on lecture slides, so figuring
  *   out how to insert into it, access a bucket by key, and iterate over
- *   the vector inside it took some trial and error.
+ *   the vector inside it took ALOTT trial and error.
  */
 bool parseLine(string &line, string &movieName, double &movieRating) {
     int commaIndex = line.find_last_of(",");
