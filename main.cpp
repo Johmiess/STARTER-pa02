@@ -120,7 +120,6 @@ int main(int argc, char** argv){
                 double movie_score = prefix_based_list[first_letter_of_prefix][j].get_movie_rating();
             }
         }
-            cout << "\n";
             sort(matching_movies_for_prefix.begin(),matching_movies_for_prefix.end(),compare_movie_ratings_then_alphabet);
 
             for(movies&m : matching_movies_for_prefix){
