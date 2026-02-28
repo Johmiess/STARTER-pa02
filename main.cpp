@@ -128,6 +128,9 @@ int main(int argc, char** argv){
             for(movies&m : matching_movies_for_prefix){
                     cout << m.get_movie_name() << ", " << m.get_movie_rating() << endl;
             }
+            if(!matching_movies_for_prefix.empty()){
+                    cout << endl;
+            }
 
             if(number_of_movies_with_prefix == 0){
                 cout << "No movies found with prefix "<< prefixes[i] << endl;
