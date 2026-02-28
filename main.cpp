@@ -22,6 +22,13 @@ using namespace std;
 
 bool parseLine(string &line, string &movieName, double &movieRating);
 
+bool compare_movie_ratings_then_alphabet(movies& movie1, movies& movie2){
+    if(movie1.get_movie_rating() != movie2.get_movie_rating()){
+        return movie1.get_movie_rating() > movie2.get_movie_rating();
+    }
+    movie1.get_movie_name() < movie2.get_movie_name();
+}
+
 int main(int argc, char** argv){
     if (argc < 2){
         cerr << "Not enough arguments provided (need at least 1 argument)." << endl;
@@ -99,20 +106,26 @@ int main(int argc, char** argv){
         int number_of_movies_with_prefix = 0;
         bool found_movie = false;
         movies current_highest("", -1.0); 
+        vector<movies> matching_movies_for_prefix;
         for(int j = 0; j < prefix_based_list[first_letter_of_prefix].size(); j ++){
             movies& current_movie = prefix_based_list[first_letter_of_prefix][j];
             string name_of_current_movie = current_movie.get_movie_name();
             if(prefixes[i] == name_of_current_movie.substr(0,prefixes[i].size())){
+                matching_movies_for_prefix.push_back(current_movie);
                 if(!found_movie || current_movie.get_movie_rating() > current_highest.get_movie_rating() || (current_movie.get_movie_rating() == current_highest.get_movie_rating() && current_movie.get_movie_name() > current_highest.get_movie_name())){
                     current_highest = current_movie;  
                     found_movie = true;
                 }
                 number_of_movies_with_prefix += 1;
                 double movie_score = prefix_based_list[first_letter_of_prefix][j].get_movie_rating();
-                cout << name_of_current_movie << ", " << movie_score << endl;
             }
         }
             cout << "\n";
+            sort(matching_movies_for_prefix.begin(),matching_movies_for_prefix.end(),compare_movie_ratings_then_alphabet);
+
+            for(movies&m : matching_movies_for_prefix){
+                    cout << m.get_movie_name() << ", " << m.get_movie_rating() << endl;
+            }
 
             if(number_of_movies_with_prefix == 0){
                 cout << "No movies found with prefix "<< prefixes[i] << endl;
@@ -123,6 +136,9 @@ int main(int argc, char** argv){
             }
         }
     
+
+    
+    cout << "\n";
     //  For each prefix,
     //  Find all movies that have that prefix and store them in an appropriate data structure
     for(int i = 0; i < highest.size(); i ++){
